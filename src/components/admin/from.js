@@ -166,9 +166,19 @@ const Add = (props) => {
 	const [ progress, setProgress ] = useState(0);
 	const onChangeHandler = (event) => {
 		console.log(event.target.files[0].size);
+		let Extension = event.target.files[0].name
+			.substring(event.target.files[0].name.lastIndexOf('.') + 1)
+			.toLowerCase();
+		console.log(Extension);
 		if (event.target.files[0].size > 2000000) {
 			alert('File is too big!');
-		} else {
+		} else if (
+			Extension === 'gif' ||
+			Extension === 'png' ||
+			Extension === 'bmp' ||
+			Extension === 'jpeg' ||
+			Extension === 'jpg'
+		) {
 			const file = URL.createObjectURL(event.target.files[0]);
 			setUrl(file);
 			setProgress(0);
@@ -176,6 +186,8 @@ const Add = (props) => {
 			setFile({
 				select: event.target.files[0]
 			});
+		} else {
+			alert('Upload an image file');
 		}
 	};
 	const [ images, setImage ] = useState({
