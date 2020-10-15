@@ -22,7 +22,8 @@ const useStyles = makeStyles((theme) => ({
 		margin: 100,
 		padding: theme.spacing(2),
 		display: 'flex',
-		overflow: 'auto',
+		maxHeight: 610,
+		overflowY: 'auto',
 		flexDirection: 'column'
 	},
 	fixedHeight: {
@@ -114,10 +115,6 @@ const Add = (props) => {
 		},
 		[ croppedAreaPixels, rotation, url ]
 	);
-
-	const onClose = useCallback(() => {
-		setCroppedImage(null);
-	}, []);
 
 	const onChangeHandler = (event) => {
 		console.log(event.target.files[0].size);
@@ -326,6 +323,7 @@ const Add = (props) => {
 					<div style={{ margin: 50 }}>
 						<div className={classes.cropContainer}>
 							<Cropper
+								maxZoom={20}
 								image={url}
 								crop={crop}
 								rotation={rotation}
@@ -344,7 +342,7 @@ const Add = (props) => {
 							<Slider
 								value={zoom}
 								min={1}
-								max={3}
+								max={20}
 								step={0.1}
 								aria-labelledby="Zoom"
 								className={classes.slider}

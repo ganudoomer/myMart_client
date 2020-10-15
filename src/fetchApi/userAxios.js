@@ -15,6 +15,24 @@ export const getStore = () => {
 	});
 };
 
+export const addAddressDb = (address, token) => {
+	const data = {
+		token: token,
+		location: address
+	};
+	console.log(data);
+	return new Promise((resolve, reject) => {
+		axios
+			.post(`${uri}/address`, data)
+			.then((res) => {
+				resolve(res.data);
+			})
+			.catch((err) => {
+				reject(err);
+			});
+	});
+};
+
 export const getItems = (e) => {
 	return new Promise((resolve, reject) => {
 		axios

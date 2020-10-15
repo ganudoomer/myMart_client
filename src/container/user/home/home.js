@@ -28,12 +28,9 @@ const Home = (props) => {
 	const [ state, setState ] = useState({
 		select: '',
 		store: null,
-		data: null,
-		select: null
+		data: null
 	});
-	const [ open, setSate ] = useState({
-		card: null
-	});
+
 	const [ count, setCount ] = useState();
 	useEffect(() => {
 		let cart = JSON.parse(localStorage.getItem('cart'));
@@ -45,9 +42,11 @@ const Home = (props) => {
 
 		(function getData() {
 			getStore().then((res) => {
-				setState({
-					...state,
-					store: res
+				setState((state) => {
+					return {
+						...state,
+						store: res
+					};
 				});
 			});
 		})();
@@ -137,7 +136,7 @@ const Home = (props) => {
 								</Select>
 								{state.image ? (
 									<Avatar className={classes.large}>
-										<img height="100%" width="100%" src={state.image} />
+										<img alt="images" height="100%" width="100%" src={state.image} />
 									</Avatar>
 								) : null}
 							</FormControl>
@@ -147,11 +146,11 @@ const Home = (props) => {
 					<div style={{ float: 'right', marginRight: 80 }}>
 						{state.data ? state.live ? (
 							<Card raised>
-								<img height="80px" width="80px" src={Open} />
+								<img alt="imagse" height="80px" width="80px" src={Open} />
 							</Card>
 						) : (
 							<Card raised>
-								<img height="80px" width="80px" src={Close} />{' '}
+								<img alt="imagess" height="80px" width="80px" src={Close} />{' '}
 							</Card>
 						) : null}
 					</div>
@@ -184,13 +183,12 @@ const Home = (props) => {
 												<Model cart={() => onCartClick(card)} data={card} />
 												<Card
 													style={{
-														borderRadius: 30,
-														backgroundColor: '#2FEF92',
-														padding: '15px 15px',
-														fontSize: '11px',
+														borderRadius: 10,
+														padding: '5px 15px',
+														fontSize: '15px',
 														marginLeft: 20
 													}}
-													variant="contained"
+													variant="outlined"
 												>
 													{card.cat}
 												</Card>

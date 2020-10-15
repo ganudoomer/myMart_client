@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-
 import { withRouter } from 'react-router-dom';
 import {
 	Button,
@@ -25,7 +24,8 @@ const useStyles = makeStyles((theme) => ({
 		margin: 100,
 		padding: theme.spacing(2),
 		display: 'flex',
-		overflow: 'auto',
+		maxHeight: 600,
+		overflowY: 'auto',
 		flexDirection: 'column'
 	},
 	fixedHeight: {
@@ -114,12 +114,8 @@ const Edit = (props) => {
 				console.error(e);
 			}
 		},
-		[ croppedAreaPixels, rotation ]
+		[ croppedAreaPixels, rotation, url ]
 	);
-
-	const onClose = useCallback(() => {
-		setCroppedImage(null);
-	}, []);
 
 	const onChangeHandler = (event) => {
 		console.log(event.target.files[0].size);
@@ -135,10 +131,7 @@ const Edit = (props) => {
 			});
 		}
 	};
-	const [ images, setImage ] = useState({
-		image: null,
-		thumbnail: null
-	});
+
 	const onsubmit = () => {
 		const data = new FormData();
 		const config = {
@@ -160,10 +153,6 @@ const Edit = (props) => {
 			setState({
 				...state,
 				image: { imageName: res.data.imageName, thumbnail: res.data.thumbnail }
-			});
-			setImage({
-				image: res.data.imageName,
-				thumbnail: res.data.thumbnail
 			});
 		});
 	};
@@ -334,6 +323,7 @@ const Edit = (props) => {
 					<div style={{ margin: 50 }}>
 						<div className={classes.cropContainer}>
 							<Cropper
+								maxZoom={20}
 								image={url}
 								crop={crop}
 								rotation={rotation}
@@ -352,7 +342,7 @@ const Edit = (props) => {
 							<Slider
 								value={zoom}
 								min={1}
-								max={3}
+								max={20}
 								step={0.1}
 								aria-labelledby="Zoom"
 								className={classes.slider}

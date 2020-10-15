@@ -33,7 +33,6 @@ export default function SimpleCard() {
 		});
 	}, []);
 	const classes = useStyles();
-	const bull = <span className={classes.bullet}>•</span>;
 
 	return (
 		<Container>

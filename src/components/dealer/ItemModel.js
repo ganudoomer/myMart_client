@@ -23,10 +23,6 @@ const useStyles = makeStyles({
 	}
 });
 
-function createData(name, calories, fat, carbs, protein) {
-	return { name, calories, fat, carbs, protein };
-}
-
 export default function AlertDialog(props) {
 	const classes = useStyles();
 	const [ open, setOpen ] = React.useState(false);
@@ -83,7 +79,12 @@ export default function AlertDialog(props) {
 										<TableRow key={index}>
 											<TableCell align="right">
 												<Avatar>
-													<img width="100%" height="100%" src={item.image.thumbnail} />
+													<img
+														alt="items"
+														width="100%"
+														height="100%"
+														src={item.image.thumbnail}
+													/>
 												</Avatar>
 											</TableCell>
 											<TableCell align="left">{item.name}</TableCell>

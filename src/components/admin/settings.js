@@ -13,6 +13,7 @@ import {
 	ListItemText
 } from '@material-ui/core';
 import { getUnit } from '../../fetchApi/adminAxios';
+import { BarLoader } from 'react-spinners';
 const useStyles = makeStyles((theme) => ({
 	paper: {
 		margin: 100,
@@ -68,7 +69,7 @@ function Settings() {
 			});
 		});
 	}, []);
-	let list = null;
+	let list = <BarLoader width="800" />;
 	if (unit.units) {
 		list = unit.units.map((unit) => (
 			<div>

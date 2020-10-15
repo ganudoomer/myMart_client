@@ -10,7 +10,6 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import Avatar from '@material-ui/core/Avatar';
 import { deleteItem } from '../../fetchApi/dealerAxios';
@@ -41,6 +40,10 @@ const useStyles = makeStyles({
 	large: {
 		width: 100,
 		height: 100
+	},
+	paper: {
+		maxHeight: 600,
+		overflowY: 'auto'
 	}
 });
 
@@ -87,7 +90,7 @@ const Tables = (props) => {
 	));
 
 	return (
-		<TableContainer component={Paper}>
+		<TableContainer className={classes.paper} component={Paper}>
 			<Typography component="h2" variant="h6" color="secondary" gutterBottom>
 				All Products
 			</Typography>

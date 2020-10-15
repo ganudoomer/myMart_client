@@ -5,10 +5,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
-import PageviewIcon from '@material-ui/icons/Pageview';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -21,10 +19,6 @@ const useStyles = makeStyles({
 		minWidth: 650
 	}
 });
-
-function createData(name, calories, fat, carbs, protein) {
-	return { name, calories, fat, carbs, protein };
-}
 
 export default function AlertDialog(props) {
 	const classes = useStyles();
@@ -66,7 +60,12 @@ export default function AlertDialog(props) {
 											<TableRow key={index}>
 												<TableCell align="left">
 													<Avatar>
-														<img width="100%" height="100%" src={item.image.thumbnail} />
+														<img
+															alt="logo"
+															width="100%"
+															height="100%"
+															src={item.image.thumbnail}
+														/>
 													</Avatar>
 												</TableCell>
 												<TableCell align="left">{item.name}</TableCell>

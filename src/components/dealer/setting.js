@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
-import { Container, Select, Paper, Checkbox, makeStyles, Button } from '@material-ui/core';
+import { Container, Select, Paper, makeStyles, Button } from '@material-ui/core';
 import { getSettings, editSettings } from '../../fetchApi/dealerAxios';
+
 const useStyles = makeStyles((theme) => ({
 	paper: {
 		margin: 100,

@@ -1,7 +1,7 @@
 import * as actionTypes from '../actions/user/actionTypes';
 
 const initialState = {
-	token: false,
+	token: localStorage.getItem('uToken'),
 	login: false,
 	error: false,
 	loading: false,

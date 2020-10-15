@@ -58,7 +58,7 @@ export const check = () => {
 			.then((response) => {
 				console.log(response);
 				const token = localStorage.getItem('dToken');
-				dispatch(authSuccessDealer());
+				dispatch(authSuccessDealer(token));
 			})
 			.catch((err) => {
 				console.log(err);

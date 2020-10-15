@@ -18,7 +18,6 @@ import * as Axios from '../../fetchApi/dealerAxios';
 import CachedIcon from '@material-ui/icons/Cached';
 import Model from './ItemModel';
 import { BarLoader } from 'react-spinners';
-
 const StyledTableCell = withStyles((theme) => ({
 	head: {
 		backgroundColor: theme.palette.common.black,
@@ -52,7 +51,7 @@ const useStyles = makeStyles({
 	}
 });
 
-const Test = () => {
+const History = () => {
 	const [ state, setState ] = useState({ data: null });
 	useEffect(() => {
 		getData();
@@ -90,19 +89,17 @@ const Test = () => {
 			const item = order.order;
 			const totalArr = item.map((items) => items.count);
 			const total = totalArr.reduce((a, b) => a + b, 0);
-			const date = new Date(order.createdOn);
+			const date = new Date(order.createdOn).toDateString();
 			const today = function() {
 				const today = new Date().toDateString();
 				const orderDate = new Date(date).toDateString();
 				return new Date(today) - new Date(orderDate);
 			};
-			if (!today()) {
+			if (today()) {
 				let value = null;
 				return (
 					<StyledTableRow>
-						<StyledTableCell align="left">
-							{date.toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit' })}
-						</StyledTableCell>
+						<StyledTableCell align="left">{date}</StyledTableCell>
 						<StyledTableCell align="left">{'₹' + order.price}</StyledTableCell>
 						<StyledTableCell align="left">{order.address}</StyledTableCell>
 						<StyledTableCell align="left">
@@ -142,7 +139,7 @@ const Test = () => {
 		<Container>
 			<TableContainer style={{ marginTop: '80px' }} className={classes.paper} component={Paper}>
 				<Typography component="h2" variant="h6" color="secondary" gutterBottom>
-					Today's Orders ({new Date().toDateString()})
+					Order History
 					<IconButton onClick={getData}>
 						<CachedIcon>Refresh</CachedIcon>
 					</IconButton>
@@ -167,4 +164,4 @@ const Test = () => {
 	);
 };
 
-export default Test;
+export default History;

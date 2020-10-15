@@ -1,12 +1,10 @@
 import React, { useEffect, useState, Fragment } from 'react';
 import { Link } from 'react-router-dom';
-import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Avatar from '@material-ui/core/Avatar';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
-import { Toolbar, ListItem, IconButton, Card, CardContent, TextField, Select } from '@material-ui/core';
+import { IconButton, Card, CardContent, TextField, Select } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -15,7 +13,15 @@ import RemoveIcon from '@material-ui/icons/Remove';
 import { connect } from 'react-redux';
 import CancelIcon from '@material-ui/icons/Cancel';
 import Layout from '../layout/layout';
-import { getUserInfo, getOrderId, capturePayment, getLiveInfo, placeOrder } from '../../../fetchApi/userAxios';
+import {
+	getUserInfo,
+	getOrderId,
+	capturePayment,
+	getLiveInfo,
+	placeOrder,
+	addAddressDb
+} from '../../../fetchApi/userAxios';
+import Model from '../../../components/user/AddressModel';
 
 const useStyles = makeStyles((theme) => ({
 	paper: {
@@ -44,11 +50,14 @@ const Cart = (props) => {
 	const [ count, setCount ] = useState();
 	const [ select, setSelect ] = useState();
 	const [ address, setAddress ] = useState({ data: null });
-
+	const [ selAd, setSelAd ] = useState();
 	useEffect(() => {
 		getUserInfo(localStorage.getItem('uToken')).then((res) => {
-			console.log(res.data);
-			setAddress({ data: res.data.location });
+			if (!res.data.message) {
+				setAddress({ data: res.data.location });
+				const arry = res.data.location;
+				setSelAd(res.data.location[arry.length - 1]);
+			}
 		});
 
 		let cart = JSON.parse(localStorage.getItem('cart'));
@@ -82,11 +91,11 @@ const Cart = (props) => {
 					const data = {
 						price: price,
 						order: localStorage.getItem('cart'),
-						address: address.data,
+						address: selAd,
 						token: localStorage.getItem('uToken')
 					};
 					const paymentId = response.razorpay_payment_id;
-					const captureResponse = await capturePayment(paymentId, data);
+					await capturePayment(paymentId, data);
 					alert(`Your order has been placed `);
 					localStorage.removeItem('cart');
 					props.history.push('/');
@@ -115,7 +124,7 @@ const Cart = (props) => {
 					const data = {
 						price: price,
 						order: localStorage.getItem('cart'),
-						address: address.data,
+						address: selAd,
 						token: localStorage.getItem('uToken')
 					};
 					placeOrder(data).then((res) => {
@@ -172,7 +181,10 @@ const Cart = (props) => {
 		const total = totalArr.reduce((a, b) => a + b, 0);
 		setPrice(total);
 	};
-
+	const [ add, setAdd ] = useState(false);
+	const onAddAddress = () => {
+		setAdd(true);
+	};
 	const onDeleteHandler = (index) => {
 		const item = order.data[index];
 		item.count = order.data[index].count - order.data[index].count;
@@ -197,10 +209,25 @@ const Cart = (props) => {
 		const total = totalArr.reduce((a, b) => a + b, 0);
 		setPrice(total);
 	};
-
+	const addressSelect = (e) => {
+		console.log(e.target.value);
+		setSelAd(e.target.value);
+	};
 	const onSelect = (e) => {
 		console.log(e.target.value);
 		setSelect(e.target.value);
+	};
+	const onAddAddressHandeler = (add) => {
+		addAddressDb(add, localStorage.getItem('uToken')).then((res) => {
+			const oldAddress = address.data;
+			oldAddress.push(add);
+			setAddress({
+				...address,
+				oldAddress
+			});
+			setSelAd(add);
+			console.log(address);
+		});
 	};
 	const classes = useStyles();
 	let cards = <h1>....Add items to use the cart</h1>;
@@ -221,6 +248,7 @@ const Cart = (props) => {
 														<Grid item>
 															<Avatar>
 																<img
+																	alt="thumbnail"
 																	height="100%"
 																	width="100%"
 																	src={item.image.thumbnail}
@@ -277,16 +305,27 @@ const Cart = (props) => {
 												</Card>
 												<form onSubmit={onOrder}>
 													<Card style={{ marginTop: 10 }}>
-														<CardContent>
-															<Typography variant="h6">Address</Typography>
-															<TextField
-																required
-																name="address"
-																className={classes.form}
-																value={address.data}
-																onChange={(e) => setAddress(e.target.value)}
-															/>
-														</CardContent>
+														{props.token ? (
+															<CardContent>
+																<Typography variant="h6">Address</Typography>
+																<Select
+																	required
+																	name="address"
+																	onChange={onSelect}
+																	style={{ minWidth: 150 }}
+																	onChange={addressSelect}
+																	value={selAd}
+																	native
+																>
+																	{address.data ? (
+																		address.data.map((item) => (
+																			<option value={item}>{item}</option>
+																		))
+																	) : null}
+																</Select>
+																<Button onClick={onAddAddress}>Add New Address</Button>{' '}
+															</CardContent>
+														) : null}
 													</Card>
 													<Card style={{ marginTop: 10 }}>
 														<CardContent>
@@ -332,6 +371,13 @@ const Cart = (props) => {
 						</Grid>
 					</Grid>
 				</Container>
+				{add ? (
+					<Model
+						onCloseHandler={() => setAdd(false)}
+						onAdSubmitHandler={(ad) => onAddAddressHandeler(ad)}
+						view={add}
+					/>
+				) : null}
 			</main>
 		);
 	}

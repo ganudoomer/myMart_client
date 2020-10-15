@@ -120,12 +120,8 @@ const Add = (props) => {
 				console.error(e);
 			}
 		},
-		[ croppedAreaPixels, rotation ]
+		[ croppedAreaPixels, rotation, url ]
 	);
-
-	const onClose = useCallback(() => {
-		setCroppedImage(null);
-	}, []);
 
 	const classes = useStyles();
 	const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
@@ -293,6 +289,7 @@ const Add = (props) => {
 							<div style={{ margin: 50 }}>
 								<div className={classes.cropContainer}>
 									<Cropper
+										maxZoom={20}
 										image={url}
 										crop={crop}
 										rotation={rotation}
@@ -311,7 +308,7 @@ const Add = (props) => {
 									<Slider
 										value={zoom}
 										min={1}
-										max={3}
+										max={20}
 										step={0.1}
 										aria-labelledby="Zoom"
 										className={classes.slider}

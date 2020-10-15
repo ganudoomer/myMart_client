@@ -45,12 +45,7 @@ const useStyles = makeStyles((theme) => ({
 const Dealer = (props) => {
 	const classes = useStyles();
 	const [ state, setState ] = useState({ phone: '91', name: '', location: '', password: '', otp: '' });
-	const onOtpsubmit = (e) => {
-		e.preventDefault();
-		console.log(state.otp);
-		console.log(state.password);
-		props.onOtpsubmitHandler(state.otp, state.password);
-	};
+
 	const onSubmitHandler = (e) => {
 		e.preventDefault();
 		console.log('He');
@@ -129,7 +124,6 @@ const Dealer = (props) => {
 						required
 						variant="outlined"
 						margin="normal"
-						required
 						fullWidth
 						type="password"
 						label="password  for your account"

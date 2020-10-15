@@ -7,15 +7,14 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 export default function FormDialog(props) {
-	const [ open, setOpen ] = React.useState(true);
+	const [ open, setOpen ] = React.useState(props.view);
 
 	const handleClose = () => {
-		setOpen(false);
+		props.onCloseHandler();
 	};
 	const [ otp, setOtp ] = useState({ otp: '' });
 	const onSubmitHandler = (e) => {
-		e.preventDefault();
-		props.onOtpsubmitHandler(otp.otp);
+		props.onAdSubmitHandler(otp.otp);
 		handleClose();
 	};
 	const onOtp = (e) => {
@@ -26,29 +25,28 @@ export default function FormDialog(props) {
 	return (
 		<div>
 			<Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-				<DialogTitle id="form-dialog-title">Enter the OTP</DialogTitle>
-				<form onSubmit={onSubmitHandler}>
-					<DialogContent>
-						<TextField
-							value={otp.otp}
-							onChange={onOtp}
-							autoFocus
-							margin="dense"
-							id="name"
-							label="OTP"
-							type="number"
-							fullWidth
-						/>
-					</DialogContent>
-					<DialogActions>
-						<Button onClick={handleClose} color="primary">
-							Cancel
-						</Button>
-						<Button type="submit" onClick={handleClose} color="primary">
-							Submit
-						</Button>
-					</DialogActions>
-				</form>
+				<DialogTitle id="form-dialog-title">Enter new address</DialogTitle>
+
+				<DialogContent>
+					<TextField
+						value={otp.otp}
+						onChange={onOtp}
+						autoFocus
+						margin="dense"
+						id="name"
+						label="Address"
+						type="text"
+						fullWidth
+					/>
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={handleClose} color="primary">
+						Cancel
+					</Button>
+					<Button type="submit" onClick={onSubmitHandler} color="primary">
+						Add
+					</Button>
+				</DialogActions>
 			</Dialog>
 		</div>
 	);

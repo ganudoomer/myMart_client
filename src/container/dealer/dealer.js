@@ -23,15 +23,15 @@ import MenuIcon from '@material-ui/icons/Menu';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import DesktopWindowsIcon from '@material-ui/icons/DesktopWindows';
 import { Link, Route, Switch } from 'react-router-dom';
 import ToggleOffIcon from '@material-ui/icons/ToggleOff';
 import Dash from '../../components/dealer/Dash';
 import ProductForm from '../../components/dealer/ProductForm';
-import Settings from '../../components/admin/settings';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import Orders from '../../components/dealer/Orders';
 import * as Axios from '../../fetchApi/dealerAxios';
+import History from '../../components/dealer/History';
+import ReceiptIcon from '@material-ui/icons/Receipt';
 
 const drawerWidth = 240;
 
@@ -195,9 +195,10 @@ const Dealer = (props) => {
 					<Typography component="h1" variant="h6" noWrap className={classes.title}>
 						Dashboard
 					</Typography>
-					<IconButton onClick={props.logoutHandler} color="inherit">
+
+					<IconButton onClick={props.logoutHandler} color="primary">
 						<a href="/">
-							<ExitToAppIcon />
+							<ExitToAppIcon style={{ color: dealer.font }} />
 						</a>
 					</IconButton>
 				</Toolbar>
@@ -210,9 +211,11 @@ const Dealer = (props) => {
 				open={open}
 			>
 				<div className={classes.toolbarIcon}>
-					<Avatar className={classes.large}>
-						<img height="100%" width="100%" src={dealer.image} />
-					</Avatar>
+					<div style={{ margin: '5px' }}>
+						<Avatar className={classes.large}>
+							<img alt="dealer" height="100%" width="100%" src={dealer.image} />
+						</Avatar>
+					</div>
 					<Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title} />
 					<Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
 						{dealer.name}
@@ -235,7 +238,12 @@ const Dealer = (props) => {
 						</ListItemIcon>
 						<ListItemText primary="Orders" />
 					</ListItem>
-
+					<ListItem component={Link} to="/dealer/dash/history" style={{ color: dealer.font }} button>
+						<ListItemIcon>
+							<ReceiptIcon style={{ color: dealer.font }} />
+						</ListItemIcon>
+						<ListItemText primary="Order History" />
+					</ListItem>
 					<ListItem style={{ color: dealer.font }} component={Link} to="/dealer/dash/setting" button>
 						<ListItemIcon>
 							<ToggleOffIcon style={{ color: dealer.font }} />
@@ -251,6 +259,7 @@ const Dealer = (props) => {
 				<Route path="/dealer/dash/product/add" exact component={ProductForm} />
 				<Route path="/dealer/dash/product/:id" component={EditForm} />
 				<Route path="/dealer/dash/orders" component={Orders} />
+				<Route path="/dealer/dash/history" component={History} />
 				<Route path="/dealer/dash/setting" component={Setting} />
 				<Route path="/dealer/dash" component={Dash} />
 			</Switch>

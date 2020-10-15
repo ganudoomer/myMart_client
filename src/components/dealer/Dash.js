@@ -9,12 +9,12 @@ import { connect } from 'react-redux';
 import Table from './table';
 import * as actionCreators from '../../store/actions/dealer/action';
 import * as Axios from '../../fetchApi/dealerAxios';
-const drawerWidth = 240;
+import { BarLoader } from 'react-spinners';
+
 const useStyles = makeStyles((theme) => ({
 	root: {
 		display: 'flex'
 	},
-	appBarSpacer: theme.mixins.toolbar,
 	content: {
 		flexGrow: 1,
 		height: '100vh',
@@ -57,7 +57,7 @@ const Dashboard = (props) => {
 
 	return (
 		<main className={classes.content}>
-			<div className={classes.appBarSpacer} />
+			<div style={{ margin: 20 }} />
 
 			<Container maxWidth="lg" className={classes.container}>
 				<Box pt={4} />
@@ -68,7 +68,7 @@ const Dashboard = (props) => {
 				</NavLink>
 				<br />
 				<br />
-				{state.data ? <Table data={state.data} del={delHandler} /> : <Typography>Loading....</Typography>}
+				{state.data ? <Table data={state.data} del={delHandler} /> : <BarLoader width="800" />}
 			</Container>
 		</main>
 	);

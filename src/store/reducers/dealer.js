@@ -1,7 +1,7 @@
 import * as actionTypes from '../actions/dealer/actionTypes';
 
 const initialState = {
-	token: false,
+	token: localStorage.getItem('dToken'),
 	error: false,
 	loading: false
 };

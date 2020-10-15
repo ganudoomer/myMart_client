@@ -12,6 +12,8 @@ import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actionCreators from '../../store/actions/admin';
 import { getDealer } from '../../fetchApi/adminAxios';
+import { BarLoader } from 'react-spinners';
+
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -206,7 +208,7 @@ const Dashboard = (props) => {
 				</NavLink>
 				<br />
 				<br />
-				{state.data ? <Table data={state.data} del={delHandler} /> : <Typography>Loading....</Typography>}
+				{state.data ? <Table data={state.data} del={delHandler} /> : <BarLoader width="800" />}
 			</Container>
 		</main>
 	);

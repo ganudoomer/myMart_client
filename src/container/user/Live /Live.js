@@ -1,16 +1,11 @@
 import React, { Fragment } from 'react';
-import { Redirect } from 'react-router-dom';
+
 import Typography from '@material-ui/core/Typography';
-import { connect } from 'react-redux';
+
 import LiveOrders from '../../../components/user/Live';
 import Layout from '../layout/layout';
 
 const Live = (props) => {
-	let redirect = <Redirect to="/" />;
-	if (props.token) {
-		redirect = null;
-	}
-
 	return (
 		<Fragment>
 			<Layout>
@@ -23,10 +18,4 @@ const Live = (props) => {
 	);
 };
 
-const mapStateToProps = (state) => {
-	return {
-		token: state.user.login
-	};
-};
-
-export default connect(mapStateToProps)(Live);
+export default Live;

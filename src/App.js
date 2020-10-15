@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import './App.css';
 import { Route, Redirect, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -16,25 +16,18 @@ import DealerProtectedRoute from './components/hoc/DealerAuth';
 import UserProtectedRoute from './components/hoc/UserAuth';
 import * as dealerAction from './store/actions/dealer/action';
 import * as adminAction from './store/actions/admin';
-import * as userAction from './store/actions/user/action';
 import Cart from './container/user/cart/cart';
 import History from './container/user/history/history';
 import Live from './container/user/Live /Live';
 import Layout from './container/user/home/home';
+import Test from './Test';
+
 function App(props) {
-	const admin = props.checkAdmin;
-	const dealer = props.checkDealer;
-	useEffect(
-		() => {
-			props.checkAdmin();
-			props.checkDealer();
-		},
-		[ admin, dealer ]
-	);
 	return (
 		<div className="App">
 			<Switch>
 				<Route path="/" exact component={Layout} />
+				<Route path="/Test" exact component={Test} />
 				<Route path="/cart" exact component={Cart} />
 				<UserProtectedRoute path="/history" auth={props.userAuth} exact component={History} />
 				<UserProtectedRoute path="/live" auth={props.userAuth} exact component={Live} />

@@ -113,12 +113,8 @@ const Edit = (props) => {
 				console.error(e);
 			}
 		},
-		[ croppedAreaPixels, rotation ]
+		[ croppedAreaPixels, rotation, url ]
 	);
-
-	const onClose = useCallback(() => {
-		setCroppedImage(null);
-	}, []);
 
 	const onColorChange = (color) => {
 		console.log(color.hex);
@@ -202,10 +198,6 @@ const Edit = (props) => {
 			});
 		}
 	};
-	const [ images, setImage ] = useState({
-		image: null,
-		thumbnail: null
-	});
 
 	const onsubmit = () => {
 		const config = {
@@ -232,15 +224,9 @@ const Edit = (props) => {
 					thumbnail: res.data.thumbnail
 				}
 			});
-			setImage({
-				image: res.data.imageName,
-				thumbnail: res.data.thumbnail
-			});
 		});
 	};
-	let bar = null;
-	bar = <LinearProgress style={{ width: '40%' }} variant="determinate" value={progress} />;
-	console.log(state);
+
 	return (
 		<Container>
 			<Paper className={fixedHeightPaper}>
@@ -325,6 +311,7 @@ const Edit = (props) => {
 					<div style={{ margin: 50 }}>
 						<div className={classes.cropContainer}>
 							<Cropper
+								maxZoom={20}
 								image={url}
 								crop={crop}
 								rotation={rotation}
@@ -343,7 +330,7 @@ const Edit = (props) => {
 							<Slider
 								value={zoom}
 								min={1}
-								max={3}
+								max={20}
 								step={0.1}
 								aria-labelledby="Zoom"
 								className={classes.slider}

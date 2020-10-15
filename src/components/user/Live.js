@@ -43,7 +43,6 @@ export default function SimpleCard() {
 		});
 	}, []);
 	const classes = useStyles();
-	const bull = <span className={classes.bullet}>•</span>;
 	return (
 		<div
 			style={{
@@ -80,7 +79,7 @@ export default function SimpleCard() {
 										<Typography className={classes.title} color="textSecondary" gutterBottom>
 											{data.status}
 											<Avatar className={classes.large}>
-												<img width="100%" height="100%" src={logo} />
+												<img alt="logo" width="100%" height="100%" src={logo} />
 											</Avatar>
 										</Typography>
 										<Typography className={classes.title} color="textSecondary" gutterBottom>

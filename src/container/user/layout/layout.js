@@ -1,11 +1,10 @@
 import React, { useEffect, useState, Fragment } from 'react';
-import { Link, Route } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import MenuItem from '@material-ui/core/MenuItem';
 import DescriptionIcon from '@material-ui/icons/Description';
 import logo from '../../../SuperMart.svg';
 import { connect } from 'react-redux';
@@ -14,16 +13,16 @@ import Shop from '../../../Buy.svg';
 import IconButton from '@material-ui/core/IconButton';
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 import { useStyles } from './layout.css';
-import Home from '../home/home';
-import Cart from '../cart/cart';
 const Layout = (props) => {
 	const [ count, setCount ] = useState();
+	let propCount = props.count;
+	const checkAuth = props.checkAuth;
 	useEffect(
 		() => {
-			props.checkAuth();
+			checkAuth();
 			countCart();
 		},
-		[ props.count ]
+		[ propCount, checkAuth ]
 	);
 	const countCart = () => {
 		let cart = JSON.parse(localStorage.getItem('cart'));
@@ -79,7 +78,7 @@ const Layout = (props) => {
 						<Link to="/cart" style={{ textDecoration: 'none' }}>
 							<IconButton>
 								<Typography variant="subtitle1">{count}</Typography>
-								<img width="30px" src={Shop} />
+								<img alt="another Logo" width="30px" src={Shop} />
 							</IconButton>
 						</Link>
 						{button}
