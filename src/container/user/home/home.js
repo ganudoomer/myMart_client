@@ -166,7 +166,10 @@ const Home = (props) => {
 						</div>
 					) : (
 						<div
-							style={{ background: state.color, color: state.font }}
+							style={{
+								background: `linear-gradient(180deg, #5b5b5b 0%, ${state.color} 50%, #ffffff 100%)`,
+								color: state.font
+							}}
 							className={classes.heroContentMarket}
 						>
 							<Container maxWidth="sm">
