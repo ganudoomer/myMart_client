@@ -10,6 +10,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
+import Loader from 'react-spinners/SyncLoader';
 
 const styles = (theme) => ({
 	root: {
@@ -53,7 +54,7 @@ const DialogActions = withStyles((theme) => ({
 
 export default function CustomizedDialogs(props) {
 	const [ open, setOpen ] = React.useState(false);
-
+	const [ loading, setLoading ] = React.useState(true);
 	const handleClickOpen = () => {
 		setOpen(true);
 	};
@@ -80,9 +81,16 @@ export default function CustomizedDialogs(props) {
 					{props.data.name}
 				</DialogTitle>
 				<div style={{ margin: 'auto' }}>
-					<img width="240rem" alt="logo" height="200rem" src={props.data.image.imageName} />
+					<img
+						style={{ margin: 'auto', display: loading ? 'none' : 'block' }}
+						width="240rem"
+						alt="logo"
+						height="200rem"
+						onLoad={() => setLoading(false)}
+						src={props.data.image.imageName}
+					/>
+					{loading ? <Loader /> : null}
 				</div>
-
 				<DialogTitle id="customized-dialog-title" onClose={handleClose}>
 					{props.data.title} <br /> ₹{props.data.price}/{props.data.unit}
 				</DialogTitle>

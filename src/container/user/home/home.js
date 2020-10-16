@@ -9,17 +9,12 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import Layout from '../layout/layout';
 import Model from '../../../components/user/model';
-
 import Snackbar from '../../../components/user/snackbar';
-
-import Open from '../../../images/open-sign.png';
-import Close from '../../../images/closed.svg';
 import { Avatar } from '@material-ui/core';
 import { getStore, getItems } from '../../../fetchApi/userAxios';
 import { useStyles } from '../layout/layout.css.js';
@@ -53,7 +48,7 @@ const Home = (props) => {
 	}, []);
 	let select = null;
 	if (state.store) {
-		select = state.store.map((data) => <MenuItem value={data.dealer_name}>{data.dealer_name}</MenuItem>);
+		select = state.store.map((data) => <option value={data.dealer_name}>{data.dealer_name}</option>);
 	}
 	const onSelectChange = (e) => {
 		console.log(e.target.value);
@@ -69,13 +64,39 @@ const Home = (props) => {
 			select: e.target.value
 		});
 		getItems(e).then((res) => {
+			function invertColor(hex) {
+				if (hex.indexOf('#') === 0) {
+					hex = hex.slice(1);
+				}
+				// convert 3-digit hex to 6-digits.
+				if (hex.length === 3) {
+					hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+				}
+				if (hex.length !== 6) {
+					throw new Error('Invalid HEX color.');
+				}
+				// invert color components
+				var r = (255 - parseInt(hex.slice(0, 2), 16)).toString(16),
+					g = (255 - parseInt(hex.slice(2, 4), 16)).toString(16),
+					b = (255 - parseInt(hex.slice(4, 6), 16)).toString(16);
+				// pad each with zeros and return
+				return '#' + padZero(r) + padZero(g) + padZero(b);
+			}
+			function padZero(str, len) {
+				len = len || 2;
+				var zeros = new Array(len).join('0');
+				return (zeros + str).slice(-len);
+			}
 			console.log(res.data);
 			setState({
 				...state,
 				select: e.target.value,
 				data: res.data[0].products,
 				live: res.data[0].live,
-				image: res.data[0].image.thumbnail
+				image: res.data[0].image.thumbnail,
+				color: res.data[0].color,
+				address: res.data[0].address,
+				font: invertColor(res.data[0].color)
 			});
 		});
 	};
@@ -116,44 +137,83 @@ const Home = (props) => {
 					{cart ? <Snackbar open={true} message="Item added  to cart" /> : null}
 					{/* Hero unit */}
 
-					<div className={classes.heroContent}>
-						<Container maxWidth="sm">
-							<Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
-								My Mart
-							</Typography>
-							<Typography variant="h5" align="center" color="textSecondary" paragraph>
-								Order from your nearest supermarket
-							</Typography>
-							<FormControl className={classes.formControl}>
-								<InputLabel id="demo-simple-select-label">Select your mart </InputLabel>
-								<Select
-									labelId="demo-simple-select-label"
-									onChange={onSelectChange}
-									value={state.select}
-									id="demo-simple-select"
+					{!state.image ? (
+						<div className={classes.heroContent}>
+							<Container maxWidth="sm">
+								<Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
+									My Mart
+								</Typography>
+								<Typography variant="h5" align="center" color="textSecondary" paragraph>
+									Order from your nearest supermarket
+								</Typography>
+								<FormControl className={classes.formControl}>
+									<InputLabel id="demo-simple-select-label">Select your mart </InputLabel>
+									<Select
+										labelId="demo-simple-select-label"
+										onChange={onSelectChange}
+										value={state.select}
+										id="demo-simple-select"
+									>
+										{select}
+									</Select>
+									{state.image ? (
+										<Avatar className={classes.large}>
+											<img alt="images" height="100%" width="100%" src={state.image} />
+										</Avatar>
+									) : null}
+								</FormControl>
+							</Container>
+						</div>
+					) : (
+						<div
+							style={{ background: state.color, color: state.font }}
+							className={classes.heroContentMarket}
+						>
+							<Container maxWidth="sm">
+								<Typography
+									style={{ color: state.font }}
+									component="h1"
+									variant="h2"
+									align="center"
+									color="textPrimary"
+									gutterBottom
 								>
-									{select}
-								</Select>
-								{state.image ? (
-									<Avatar className={classes.large}>
-										<img alt="images" height="100%" width="100%" src={state.image} />
-									</Avatar>
-								) : null}
-							</FormControl>
-						</Container>
-					</div>
+									{state.select}
+									<Typography component="h5" variant="h4">
+										is {state.live ? 'Open for Orders' : 'Closed'}
+									</Typography>
+								</Typography>
+								<Typography
+									style={{ color: state.font }}
+									variant="h5"
+									align="center"
+									color="textSecondary"
+									paragraph
+								>
+									{state.address}
+								</Typography>
+								<Avatar className={classes.large}>
+									<img alt="images" height="100%" width="100%" src={state.image} />
+								</Avatar>
+								<FormControl style={{ color: state.font }} className={classes.formControl}>
+									<InputLabel style={{ color: state.font }} id="demo-simple-select-label">
+										Select your mart{' '}
+									</InputLabel>
+									<Select
+										style={{ color: state.font }}
+										labelId="demo-simple-select-label"
+										onChange={onSelectChange}
+										value={state.select}
+										id="demo-simple-select"
+									>
+										{select}
+									</Select>
+								</FormControl>
+							</Container>
+						</div>
+					)}
+
 					{/* End hero unit */}
-					<div style={{ float: 'right', marginRight: 80 }}>
-						{state.data ? state.live ? (
-							<Card raised>
-								<img alt="imagse" height="80px" width="80px" src={Open} />
-							</Card>
-						) : (
-							<Card raised>
-								<img alt="imagess" height="80px" width="80px" src={Close} />{' '}
-							</Card>
-						) : null}
-					</div>
 					<Container className={classes.cardGrid} maxWidth="md">
 						<Grid container spacing={4}>
 							{state.data ? (
