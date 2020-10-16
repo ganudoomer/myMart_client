@@ -5,6 +5,7 @@ import { CardContent, Container } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import Model from './ItemModel';
 import * as Axios from '../../fetchApi/userAxios';
+import { FadeLoader } from 'react-spinners';
 
 const useStyles = makeStyles({
 	root: {
@@ -74,7 +75,11 @@ export default function SimpleCard() {
 							return null;
 						}
 					})
-				) : null}
+				) : (
+					<div style={{ marginLeft: '50%' }}>
+						<FadeLoader />
+					</div>
+				)}
 			</div>
 		</Container>
 	);

@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { Route, Redirect, Switch } from 'react-router-dom';
+import { Route, Redirect, Switch, HashRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Login from './container/admin/login/login';
 import Dash from './container/admin/admin';
@@ -24,26 +24,32 @@ import Test from './Test';
 
 function App(props) {
 	return (
-		<div className="App">
-			<Switch>
-				<Route path="/" exact component={Layout} />
-				<Route path="/Test" exact component={Test} />
-				<Route path="/cart" exact component={Cart} />
-				<UserProtectedRoute path="/history" auth={props.userAuth} exact component={History} />
-				<UserProtectedRoute path="/live" auth={props.userAuth} exact component={Live} />
-				<Route path="/logout" component={LogoutUser} />
-				<Route path="/login" component={LoginUser} />
-				<Route path="/register" component={RegisterUser} />
-				<Route path="/dealer/login" component={LoginDealer} />
-				<DealerProtectedRoute path="/dealer/" auth={props.dealerAuth} component={DashDealer} />
-				<Route path="/dealer/logout" component={LogoutDealer} />
-				<Route path="/admin/login" component={Login} />
-				<AdminProtectedRoute path="/admin/dash" auth={props.adminAuth} component={Dash} />
-				<Route path="/admin/logout" component={Logout} />
-				<Redirect path="/admin" to="/admin/login" />
-				<Redirect to="/" />
-			</Switch>
-		</div>
+		<HashRouter>
+			<Route
+				render={(location) => {
+					return (
+						<Switch location={location.location}>
+							<Route path="/Test" exact component={Test} />
+							<Route path="/" exact component={Layout} />
+							<Route path="/cart" exact component={Cart} />
+							<UserProtectedRoute path="/history" auth={props.userAuth} exact component={History} />
+							<UserProtectedRoute path="/live" auth={props.userAuth} exact component={Live} />
+							<Route path="/logout" component={LogoutUser} />
+							<Route path="/login" component={LoginUser} />
+							<Route path="/register" component={RegisterUser} />
+							<Route path="/dealer/login" component={LoginDealer} />
+							<DealerProtectedRoute path="/dealer/" auth={props.dealerAuth} component={DashDealer} />
+							<Route path="/dealer/logout" component={LogoutDealer} />
+							<Route path="/admin/login" component={Login} />
+							<AdminProtectedRoute path="/admin/dash" auth={props.adminAuth} component={Dash} />
+							<Route path="/admin/logout" component={Logout} />
+							<Redirect path="/admin" to="/admin/login" />
+							<Redirect to="/" />
+						</Switch>
+					);
+				}}
+			/>
+		</HashRouter>
 	);
 }
 

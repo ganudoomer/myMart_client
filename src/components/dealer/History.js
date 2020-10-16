@@ -131,6 +131,8 @@ const History = () => {
 						</StyledTableCell>
 					</StyledTableRow>
 				);
+			} else {
+				return null;
 			}
 		});
 	}

@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Avatar from '@material-ui/core/Avatar';
 import Grid from '@material-ui/core/Grid';
-import { IconButton, Card, CardContent, TextField, Select } from '@material-ui/core';
+import { IconButton, Card, CardContent, Select } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -214,6 +214,7 @@ const Cart = (props) => {
 		setSelAd(e.target.value);
 	};
 	const onSelect = (e) => {
+		addressSelect(e);
 		console.log(e.target.value);
 		setSelect(e.target.value);
 	};
@@ -313,7 +314,6 @@ const Cart = (props) => {
 																	name="address"
 																	onChange={onSelect}
 																	style={{ minWidth: 150 }}
-																	onChange={addressSelect}
 																	value={selAd}
 																	native
 																>

@@ -134,6 +134,8 @@ const Test = () => {
 						</StyledTableCell>
 					</StyledTableRow>
 				);
+			} else {
+				return null;
 			}
 		});
 	}

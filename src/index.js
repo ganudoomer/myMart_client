@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { HashRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
 import thunk from 'redux-thunk';
@@ -26,11 +25,9 @@ if (process.env.NODE_ENV === 'development') {
 }
 const store = createStore(rootReduser, composeEnhancers(applyMiddleware(thunk)));
 ReactDOM.render(
-	<HashRouter>
-		<Provider store={store}>
-			<App />
-		</Provider>
-	</HashRouter>,
+	<Provider store={store}>
+		<App />
+	</Provider>,
 	document.getElementById('root')
 );
 
