@@ -15,6 +15,7 @@ import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import Layout from '../layout/layout';
 import Model from '../../../components/user/model';
 import Snackbar from '../../../components/user/snackbar';
+import MenuItem from '@material-ui/core/MenuItem';
 import { Avatar } from '@material-ui/core';
 import { getStore, getItems } from '../../../fetchApi/userAxios';
 import { useStyles } from '../layout/layout.css.js';
@@ -48,7 +49,7 @@ const Home = (props) => {
 	}, []);
 	let select = null;
 	if (state.store) {
-		select = state.store.map((data) => <option value={data.dealer_name}>{data.dealer_name}</option>);
+		select = state.store.map((data) => <MenuItem value={data.dealer_name}>{data.dealer_name}</MenuItem>);
 	}
 	const onSelectChange = (e) => {
 		console.log(e.target.value);
@@ -146,21 +147,11 @@ const Home = (props) => {
 								<Typography variant="h5" align="center" color="textSecondary" paragraph>
 									Order from your nearest supermarket
 								</Typography>
-								<FormControl className={classes.formControl}>
+								<FormControl variant="filled" className={classes.formControl}>
 									<InputLabel id="demo-simple-select-label">Select your mart </InputLabel>
-									<Select
-										labelId="demo-simple-select-label"
-										onChange={onSelectChange}
-										value={state.select}
-										id="demo-simple-select"
-									>
+									<Select onChange={onSelectChange} value={state.select} id="demo-simple-select">
 										{select}
 									</Select>
-									{state.image ? (
-										<Avatar className={classes.large}>
-											<img alt="images" height="100%" width="100%" src={state.image} />
-										</Avatar>
-									) : null}
 								</FormControl>
 							</Container>
 						</div>
@@ -198,17 +189,11 @@ const Home = (props) => {
 								<Avatar className={classes.large}>
 									<img alt="images" height="100%" width="100%" src={state.image} />
 								</Avatar>
-								<FormControl style={{ color: state.font }} className={classes.formControl}>
-									<InputLabel style={{ color: state.font }} id="demo-simple-select-label">
-										Select your mart{' '}
-									</InputLabel>
-									<Select
-										style={{ color: state.font }}
-										labelId="demo-simple-select-label"
-										onChange={onSelectChange}
-										value={state.select}
-										id="demo-simple-select"
-									>
+								<br />
+
+								<FormControl variant="filled" className={classes.formControl}>
+									<InputLabel id="demo-simple-select-filled-label">Select another mart </InputLabel>
+									<Select onChange={onSelectChange} value={state.select} id="demo-simple-select">
 										{select}
 									</Select>
 								</FormControl>
@@ -270,7 +255,7 @@ const Home = (props) => {
 														<AddShoppingCartIcon />
 													</Button>
 												) : (
-													<Button> Out Of Stock</Button>
+													<Button disabled> Out Of Stock</Button>
 												)}
 											</CardActions>
 										</Card>
