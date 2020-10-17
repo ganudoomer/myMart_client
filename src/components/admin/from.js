@@ -200,13 +200,14 @@ const Add = (props) => {
 						progressEvent.target.getResponseHeader('x-decompressed-content-length');
 				console.log('onUploadProgress', totalLength);
 				if (totalLength !== null) {
-					setProgress(Math.round(progressEvent.loaded * 100 / totalLength));
+					setProgress(Math.round(progressEvent.loaded * 100 / totalLength) - 10);
 				}
 			}
 		};
 		const data = new FormData();
 		data.append('file', file.select);
 		upload(data, config).then((res) => {
+			setProgress(100);
 			console.log(res.data.imageName);
 			console.log(res.data.thumbnail);
 

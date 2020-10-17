@@ -19,6 +19,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { Avatar } from '@material-ui/core';
 import { getStore, getItems } from '../../../fetchApi/userAxios';
 import { useStyles } from '../layout/layout.css.js';
+import Backdrop from '../../../Test';
 
 const Home = (props) => {
 	const [ state, setState ] = useState({
@@ -47,6 +48,7 @@ const Home = (props) => {
 			});
 		})();
 	}, []);
+	const [ loading, setLoading ] = useState(false);
 	let select = null;
 	if (state.store) {
 		select = state.store.map((data) => <MenuItem value={data.dealer_name}>{data.dealer_name}</MenuItem>);
@@ -64,7 +66,10 @@ const Home = (props) => {
 			...state,
 			select: e.target.value
 		});
+		setLoading(true);
 		getItems(e).then((res) => {
+			setLoading(false);
+
 			function invertColor(hex) {
 				if (hex.indexOf('#') === 0) {
 					hex = hex.slice(1);
@@ -163,6 +168,7 @@ const Home = (props) => {
 							}}
 							className={classes.heroContentMarket}
 						>
+							{loading ? <Backdrop /> : null}
 							<Container maxWidth="sm">
 								<Typography
 									style={{ color: state.font }}

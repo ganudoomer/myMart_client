@@ -13,6 +13,7 @@ import RemoveIcon from '@material-ui/icons/Remove';
 import { connect } from 'react-redux';
 import CancelIcon from '@material-ui/icons/Cancel';
 import Layout from '../layout/layout';
+import Backdrop from '../../../Test';
 import {
 	getUserInfo,
 	getOrderId,
@@ -48,7 +49,8 @@ const Cart = (props) => {
 	});
 	const [ price, setPrice ] = useState();
 	const [ count, setCount ] = useState();
-	const [ select, setSelect ] = useState();
+
+	const [ payment, setPayment ] = useState();
 	const [ address, setAddress ] = useState({ data: null });
 	const [ selAd, setSelAd ] = useState();
 	useEffect(() => {
@@ -73,9 +75,10 @@ const Cart = (props) => {
 			setPrice(total);
 		}
 	}, []);
-
+	const [ loading, setLoading ] = useState(false);
 	//=======================================================================//
 	const paymentHandler = async () => {
+		setLoading(true);
 		const datas = {
 			price: price
 		};
@@ -95,10 +98,12 @@ const Cart = (props) => {
 						token: localStorage.getItem('uToken')
 					};
 					const paymentId = response.razorpay_payment_id;
-					await capturePayment(paymentId, data);
-					alert(`Your order has been placed `);
-					localStorage.removeItem('cart');
-					props.history.push('/');
+					await capturePayment(paymentId, data).then(() => {
+						setLoading(false);
+						alert(`Your order has been placed `);
+						localStorage.removeItem('cart');
+						props.history.push('/live');
+					});
 				} catch (err) {
 					console.log(err);
 				}
@@ -118,9 +123,10 @@ const Cart = (props) => {
 		console.log(dealer);
 		getLiveInfo({ dealer: dealer }).then((res) => {
 			if (res.data[0].live) {
-				if (select === 'ONLINE') {
+				if (payment === 'ONLINE') {
 					paymentHandler();
 				} else {
+					setLoading(true);
 					const data = {
 						price: price,
 						order: localStorage.getItem('cart'),
@@ -129,8 +135,9 @@ const Cart = (props) => {
 					};
 					placeOrder(data).then((res) => {
 						console.log(res);
+						setLoading(false);
 						localStorage.removeItem('cart');
-						props.history.push('/');
+						props.history.push('/live');
 						alert(`Your order has been placed `);
 					});
 				}
@@ -216,8 +223,8 @@ const Cart = (props) => {
 	const onSelect = (e) => {
 		addressSelect(e);
 		console.log(e.target.value);
-		setSelect(e.target.value);
 	};
+
 	const onAddAddressHandeler = (add) => {
 		addAddressDb(add, localStorage.getItem('uToken')).then((res) => {
 			const oldAddress = address.data;
@@ -235,6 +242,7 @@ const Cart = (props) => {
 	if (order.data) {
 		cards = (
 			<main>
+				{loading ? <Backdrop /> : null}
 				<Container style={{ marginTop: '10px' }}>
 					<Grid container className={classes.root} spacing={2}>
 						<Grid item xs={12}>
@@ -331,7 +339,7 @@ const Cart = (props) => {
 														<CardContent>
 															<Typography variant="h6">Mode of payment</Typography>
 															<Select
-																onChange={onSelect}
+																onChange={(e) => setPayment(e.target.value)}
 																style={{ minWidth: 150 }}
 																native
 															>

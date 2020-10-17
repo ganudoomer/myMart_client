@@ -135,7 +135,7 @@ const Admin = (props) => {
 						Dashboard
 					</Typography>
 					<a href="/">
-						<IconButton onClick={props.logoutHandler} color="inherit">
+						<IconButton onClick={props.logoutHandler} style={{ color: 'white' }}>
 							<ExitToAppIcon />
 						</IconButton>
 					</a>

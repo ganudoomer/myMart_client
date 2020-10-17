@@ -142,12 +142,13 @@ const Edit = (props) => {
 						progressEvent.target.getResponseHeader('x-decompressed-content-length');
 				console.log('onUploadProgress', totalLength);
 				if (totalLength !== null) {
-					setProgress(Math.round(progressEvent.loaded * 100 / totalLength));
+					setProgress(Math.round(progressEvent.loaded * 100 / totalLength) - 10);
 				}
 			}
 		};
 		data.append('file', file.select);
 		Axios.upload(data, config).then((res) => {
+			setProgress(100);
 			console.log(res.data.imageName);
 			console.log(res.data.thumbnail);
 			setState({
