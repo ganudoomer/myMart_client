@@ -4,7 +4,10 @@ export const useStyles = makeStyles((theme) => ({
 	formControl: {
 		margin: 'auto',
 		marginLeft: 125,
-		minWidth: 300
+		minWidth: 300,
+		[theme.breakpoints.down('sm')]: {
+			marginLeft: 25
+		}
 	},
 	button: {
 		marginLeft: 20
