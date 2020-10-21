@@ -285,21 +285,50 @@ const Home = (props) => {
 									</Grid>
 								))
 							) : (
-								<Typography>Stores </Typography>
+								<React.Fragment>
+									<Typography variant="h4">Stores </Typography>
+								</React.Fragment>
 							)}
 						</Grid>
 						{!state.data ? (
 							<div>
+								<br />
+								<br />
 								<Grid container spacing={4}>
 									{state.store ? (
 										state.store.map((store) => (
 											<Grid item key={store} xs={12} sm={6} md={4}>
 												<Card className={classes.card}>
-													<CardContent className={classes.cardContent}>
-														<Typography gutterBottom variant="h5" component="h2">
-															{store.dealer_name}
-														</Typography>
-													</CardContent>
+													<div
+														onClick={() => {
+															let e = { target: { value: store.dealer_name } };
+															onSelectChange(e);
+														}}
+													>
+														<CardMedia
+															className={classes.cardMedia}
+															image={store.image.thumbnail}
+															title="Image title"
+														/>
+														<CardContent className={classes.cardContent}>
+															<Typography gutterBottom variant="h5" component="h2">
+																{store.dealer_name}
+															</Typography>
+															<Typography>{store.address}</Typography>
+															<Typography>{store.live ? 'OPEN' : 'CLOSE'}</Typography>
+														</CardContent>
+													</div>
+													<Divider className={classes.divider} light />
+													<CardActions>
+														<Button
+															onClick={() => {
+																let e = { target: { value: store.dealer_name } };
+																onSelectChange(e);
+															}}
+														>
+															View Items
+														</Button>
+													</CardActions>
 												</Card>
 											</Grid>
 										))
