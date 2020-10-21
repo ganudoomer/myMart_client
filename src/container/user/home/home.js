@@ -54,57 +54,74 @@ const Home = (props) => {
 		select = state.store.map((data) => <MenuItem value={data.dealer_name}>{data.dealer_name}</MenuItem>);
 	}
 	const onSelectChange = (e) => {
-		console.log(e.target.value);
+		let cart = JSON.parse(localStorage.getItem('cart'));
 		if (localStorage.getItem('cart') && JSON.parse(localStorage.getItem('cart')).length > 0) {
-			let cart = JSON.parse(localStorage.getItem('cart'));
 			if (cart[0].dealer_name !== e.target.value) {
-				localStorage.removeItem('cart');
-				setCount(null);
+				if (window.confirm('Are you sure you want to remove ?')) {
+					localStorage.removeItem('cart');
+					setCount(null);
+					doTask();
+				}
+			} else {
+				doTask();
 			}
+		} else {
+			doTask();
 		}
-		setState({
-			...state,
-			select: e.target.value
-		});
-		setLoading(true);
-		getItems(e).then((res) => {
-			setLoading(false);
 
-			function invertColor(hex) {
-				if (hex.indexOf('#') === 0) {
-					hex = hex.slice(1);
+		function doTask() {
+			console.log(e.target.value);
+			if (localStorage.getItem('cart') && JSON.parse(localStorage.getItem('cart')).length > 0) {
+				let cart = JSON.parse(localStorage.getItem('cart'));
+				if (cart[0].dealer_name !== e.target.value) {
+					localStorage.removeItem('cart');
+					setCount(null);
 				}
-				// convert 3-digit hex to 6-digits.
-				if (hex.length === 3) {
-					hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
-				}
-				if (hex.length !== 6) {
-					throw new Error('Invalid HEX color.');
-				}
-				// invert color components
-				var r = (255 - parseInt(hex.slice(0, 2), 16)).toString(16),
-					g = (255 - parseInt(hex.slice(2, 4), 16)).toString(16),
-					b = (255 - parseInt(hex.slice(4, 6), 16)).toString(16);
-				// pad each with zeros and return
-				return '#' + padZero(r) + padZero(g) + padZero(b);
 			}
-			function padZero(str, len) {
-				len = len || 2;
-				var zeros = new Array(len).join('0');
-				return (zeros + str).slice(-len);
-			}
-			console.log(res.data);
 			setState({
 				...state,
-				select: e.target.value,
-				data: res.data[0].products,
-				live: res.data[0].live,
-				image: res.data[0].image.thumbnail,
-				color: res.data[0].color,
-				address: res.data[0].address,
-				font: invertColor(res.data[0].color)
+				select: e.target.value
 			});
-		});
+			setLoading(true);
+			getItems(e).then((res) => {
+				setLoading(false);
+
+				function invertColor(hex) {
+					if (hex.indexOf('#') === 0) {
+						hex = hex.slice(1);
+					}
+					// convert 3-digit hex to 6-digits.
+					if (hex.length === 3) {
+						hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+					}
+					if (hex.length !== 6) {
+						throw new Error('Invalid HEX color.');
+					}
+					// invert color components
+					var r = (255 - parseInt(hex.slice(0, 2), 16)).toString(16),
+						g = (255 - parseInt(hex.slice(2, 4), 16)).toString(16),
+						b = (255 - parseInt(hex.slice(4, 6), 16)).toString(16);
+					// pad each with zeros and return
+					return '#' + padZero(r) + padZero(g) + padZero(b);
+				}
+				function padZero(str, len) {
+					len = len || 2;
+					var zeros = new Array(len).join('0');
+					return (zeros + str).slice(-len);
+				}
+				console.log(res.data);
+				setState({
+					...state,
+					select: e.target.value,
+					data: res.data[0].products,
+					live: res.data[0].live,
+					image: res.data[0].image.thumbnail,
+					color: res.data[0].color,
+					address: res.data[0].address,
+					font: invertColor(res.data[0].color)
+				});
+			});
+		}
 	};
 	const classes = useStyles();
 	const [ cart, setCart ] = useState(false);
@@ -268,9 +285,28 @@ const Home = (props) => {
 									</Grid>
 								))
 							) : (
-								<Typography>Select a store</Typography>
+								<Typography>Stores </Typography>
 							)}
 						</Grid>
+						{!state.data ? (
+							<div>
+								<Grid container spacing={4}>
+									{state.store ? (
+										state.store.map((store) => (
+											<Grid item key={store} xs={12} sm={6} md={4}>
+												<Card className={classes.card}>
+													<CardContent className={classes.cardContent}>
+														<Typography gutterBottom variant="h5" component="h2">
+															{store.dealer_name}
+														</Typography>
+													</CardContent>
+												</Card>
+											</Grid>
+										))
+									) : null}
+								</Grid>
+							</div>
+						) : null}
 					</Container>
 				</main>
 			</Layout>

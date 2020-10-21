@@ -67,7 +67,7 @@ const Layout = (props) => {
 	return (
 		<React.Fragment>
 			<CssBaseline />
-			<AppBar color="transparent" position="relative">
+			<AppBar color="white" position="sticky">
 				<Toolbar>
 					<Typography variant="h6" color="inherit" noWrap>
 						<Link to="/">
