@@ -17,7 +17,7 @@ import Model from '../../../components/user/model';
 import Snackbar from '../../../components/user/snackbar';
 import MenuItem from '@material-ui/core/MenuItem';
 import { Avatar } from '@material-ui/core';
-import { getStore, getItems } from '../../../fetchApi/userAxios';
+import { getStore, getItems, getCartItems, changeItemsCart } from '../../../fetchApi/userAxios';
 import { useStyles } from '../layout/layout.css.js';
 import Backdrop from '../../../Test';
 
@@ -30,6 +30,28 @@ const Home = (props) => {
 
 	const [ count, setCount ] = useState();
 	useEffect(() => {
+		if (localStorage.getItem('uToken')) {
+			getCartItems(localStorage.getItem('uToken'))
+				.then((res) => {
+					console.log(res.data.orders);
+					if (res.data.orders.length) {
+						localStorage.setItem('cart', JSON.stringify(res.data.orders[0]));
+						console.log('yes');
+					} else {
+						if (localStorage.getItem('cart')) {
+							changeItemsCart({
+								token: localStorage.getItem('uToken'),
+								cart: JSON.parse(localStorage.getItem('cart'))
+							}).then((res) => {
+								console.log(res);
+							});
+						}
+					}
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		}
 		let cart = JSON.parse(localStorage.getItem('cart'));
 		if (cart) {
 			const totalArrCount = cart.map((item) => item.count);
@@ -137,6 +159,10 @@ const Home = (props) => {
 				localCart.push(cart);
 				localStorage.removeItem('cart');
 				localStorage.setItem('cart', JSON.stringify(localCart));
+				changeItemsCart({
+					token: localStorage.getItem('uToken'),
+					cart: JSON.parse(localStorage.getItem('cart'))
+				});
 				console.log(localCart);
 			}
 		} else {
@@ -144,6 +170,10 @@ const Home = (props) => {
 			cart.count = 1;
 			localCart.push(cart);
 			localStorage.setItem('cart', JSON.stringify(localCart));
+			changeItemsCart({
+				token: localStorage.getItem('uToken'),
+				cart: JSON.parse(localStorage.getItem('cart'))
+			});
 		}
 		setTimeout(() => {
 			setCart(false);

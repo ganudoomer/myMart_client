@@ -124,6 +124,32 @@ export const getOrders = (token) => {
 	});
 };
 
+export const getCartItems = (token) => {
+	return new Promise((resolve, reject) => {
+		axios
+			.post(`${uri}getCart`, { token: token })
+			.then((result) => {
+				resolve(result);
+			})
+			.catch((err) => {
+				reject(err);
+			});
+	});
+};
+
+export const changeItemsCart = (data) => {
+	return new Promise((resolve, reject) => {
+		axios
+			.post(`${uri}cart`, data)
+			.then((result) => {
+				resolve(result);
+			})
+			.catch((err) => {
+				reject(err);
+			});
+	});
+};
+
 //==============LOGIN AND SIGN UP===========================//
 
 export const authUser = (data) => {
