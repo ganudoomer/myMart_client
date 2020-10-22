@@ -30,7 +30,7 @@ import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 import Open from '../../images/open-sign.png';
 import Close from '../../images/closed.svg';
 import { Avatar } from '@material-ui/core';
-import { getStore, getItems } from '../../fetchApi/userAxios';
+import { getStore, getItems, changeItemsCart } from '../../fetchApi/userAxios';
 
 const useStyles = makeStyles((theme) => ({
 	formControl: {
@@ -96,6 +96,7 @@ const Home = (props) => {
 	});
 	const [ count, setCount ] = useState();
 	useEffect(() => {
+		setCount(null);
 		props.checkAuth();
 		let cart = JSON.parse(localStorage.getItem('cart'));
 		if (cart) {
@@ -122,6 +123,7 @@ const Home = (props) => {
 			let cart = JSON.parse(localStorage.getItem('cart'));
 			if (cart[0].dealer_name !== e.target.value) {
 				localStorage.removeItem('cart');
+
 				setCount(null);
 			}
 		}

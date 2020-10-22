@@ -59,8 +59,8 @@ const Cart = (props) => {
 		if (localStorage.getItem('uToken')) {
 			getCartItems(localStorage.getItem('uToken'))
 				.then((res) => {
-					console.log(res.data.orders);
-					if (res.data.orders.length) {
+					console.log(res.data.orders[0].length);
+					if (res.data.orders[0].length) {
 						localStorage.setItem('cart', JSON.stringify(res.data.orders[0]));
 						console.log('yes');
 						let cart = JSON.parse(localStorage.getItem('cart'));
@@ -77,11 +77,9 @@ const Cart = (props) => {
 						}
 					} else {
 						if (localStorage.getItem('cart')) {
-							changeItemsCart({
-								token: localStorage.getItem('uToken'),
-								cart: JSON.parse(localStorage.getItem('cart'))
-							}).then((res) => {
-								console.log(res);
+							let cart = JSON.parse(localStorage.getItem('cart'));
+							setData({
+								data: cart
 							});
 						}
 						let cart = JSON.parse(localStorage.getItem('cart'));
@@ -101,6 +99,27 @@ const Cart = (props) => {
 				.catch((err) => {
 					console.log(err);
 				});
+		} else {
+			if (localStorage.getItem('cart')) {
+				changeItemsCart({
+					token: localStorage.getItem('uToken'),
+					cart: JSON.parse(localStorage.getItem('cart'))
+				}).then((res) => {
+					console.log(res);
+				});
+			}
+			let cart = JSON.parse(localStorage.getItem('cart'));
+			setData({
+				data: cart
+			});
+			if (cart) {
+				const totalArrCount = cart.map((item) => item.count);
+				const totalCount = totalArrCount.reduce((a, b) => a + b, 0);
+				setCount(totalCount);
+				const totalArr = cart.map((item) => item.count * item.price);
+				const total = totalArr.reduce((a, b) => a + b, 0);
+				setPrice(total);
+			}
 		}
 		getUserInfo(localStorage.getItem('uToken')).then((res) => {
 			if (!res.data.message) {

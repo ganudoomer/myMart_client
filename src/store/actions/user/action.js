@@ -25,6 +25,7 @@ export const authFailUSer = (error) => {
 
 export const logoutUser = () => {
 	localStorage.removeItem('uToken');
+	localStorage.removeItem('cart');
 	return {
 		type: actionTypes.AUTH_LOGOUT_USER
 	};
