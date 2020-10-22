@@ -79,8 +79,18 @@ const Home = (props) => {
 		let cart = JSON.parse(localStorage.getItem('cart'));
 		if (localStorage.getItem('cart') && JSON.parse(localStorage.getItem('cart')).length > 0) {
 			if (cart[0].dealer_name !== e.target.value) {
-				if (window.confirm('Are you sure you want to remove ?')) {
+				if (
+					window.confirm(
+						'When you add items from another store your cart will be reset .Are you sure you want to continue ?  '
+					)
+				) {
 					localStorage.removeItem('cart');
+					changeItemsCart({
+						token: localStorage.getItem('uToken'),
+						cart: []
+					}).then((res) => {
+						console.log(res);
+					});
 					setCount(null);
 					doTask();
 				}
@@ -90,7 +100,7 @@ const Home = (props) => {
 		} else {
 			doTask();
 		}
-
+		doTask();
 		function doTask() {
 			console.log(e.target.value);
 			if (localStorage.getItem('cart') && JSON.parse(localStorage.getItem('cart')).length > 0) {
@@ -147,47 +157,58 @@ const Home = (props) => {
 	};
 	const classes = useStyles();
 	const [ cart, setCart ] = useState(false);
+	const [ meg, setMeg ] = useState(false);
+
 	const onCartClick = (cart) => {
-		setCart(true);
-		let localCart = [];
-		if (localStorage.getItem('cart')) {
-			localCart = JSON.parse(localStorage.getItem('cart'));
-			const exist = Boolean(localCart.find((item) => item._id === cart._id));
-			if (!exist) {
-				cart.count = 1;
+		if (localStorage.getItem('uToken')) {
+			setCart(true);
+			let localCart = [];
+			if (localStorage.getItem('cart')) {
+				localCart = JSON.parse(localStorage.getItem('cart'));
+				const exist = Boolean(localCart.find((item) => item._id === cart._id));
+				if (!exist) {
+					cart.count = 1;
+					cart.dealer_name = state.select;
+					localCart.push(cart);
+					localStorage.removeItem('cart');
+					localStorage.setItem('cart', JSON.stringify(localCart));
+					changeItemsCart({
+						token: localStorage.getItem('uToken'),
+						cart: JSON.parse(localStorage.getItem('cart'))
+					});
+					console.log(localCart);
+				}
+			} else {
 				cart.dealer_name = state.select;
+				cart.count = 1;
 				localCart.push(cart);
-				localStorage.removeItem('cart');
 				localStorage.setItem('cart', JSON.stringify(localCart));
 				changeItemsCart({
 					token: localStorage.getItem('uToken'),
 					cart: JSON.parse(localStorage.getItem('cart'))
 				});
-				console.log(localCart);
 			}
+			setTimeout(() => {
+				setCart(false);
+			}, 1000);
+			let carts = JSON.parse(localStorage.getItem('cart'));
+			const totalArrCount = carts.map((item) => item.count);
+			const totalCount = totalArrCount.reduce((a, b) => a + b, 0);
+			setCount(totalCount);
 		} else {
-			cart.dealer_name = state.select;
-			cart.count = 1;
-			localCart.push(cart);
-			localStorage.setItem('cart', JSON.stringify(localCart));
-			changeItemsCart({
-				token: localStorage.getItem('uToken'),
-				cart: JSON.parse(localStorage.getItem('cart'))
-			});
+			setMeg(true);
+			setTimeout(() => {
+				setMeg(false);
+			}, 1000);
 		}
-		setTimeout(() => {
-			setCart(false);
-		}, 1000);
-		let carts = JSON.parse(localStorage.getItem('cart'));
-		const totalArrCount = carts.map((item) => item.count);
-		const totalCount = totalArrCount.reduce((a, b) => a + b, 0);
-		setCount(totalCount);
 	};
 	return (
 		<React.Fragment>
 			<Layout count={count}>
 				<main>
 					{cart ? <Snackbar open={true} message="Item added  to cart" /> : null}
+					{meg ? <Snackbar open={true} message="Login to add items to the cart" /> : null}
+
 					{/* Hero unit */}
 
 					{!state.image ? (

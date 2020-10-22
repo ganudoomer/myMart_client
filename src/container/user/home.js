@@ -174,33 +174,41 @@ const Home = (props) => {
 		);
 	}
 	const [ cart, setCart ] = useState(false);
+	const [ meg, setMeg ] = useState(true);
 	const onCartClick = (cart) => {
-		setCart(true);
-		let localCart = [];
-		if (localStorage.getItem('cart')) {
-			localCart = JSON.parse(localStorage.getItem('cart'));
-			const exist = Boolean(localCart.find((item) => item._id === cart._id));
-			if (!exist) {
-				cart.count = 1;
+		if (localStorage.getItem('uToken')) {
+			setCart(true);
+			let localCart = [];
+			if (localStorage.getItem('cart')) {
+				localCart = JSON.parse(localStorage.getItem('cart'));
+				const exist = Boolean(localCart.find((item) => item._id === cart._id));
+				if (!exist) {
+					cart.count = 1;
+					cart.dealer_name = state.select;
+					localCart.push(cart);
+					localStorage.removeItem('cart');
+					localStorage.setItem('cart', JSON.stringify(localCart));
+					console.log(localCart);
+				}
+			} else {
 				cart.dealer_name = state.select;
+				cart.count = 1;
 				localCart.push(cart);
-				localStorage.removeItem('cart');
 				localStorage.setItem('cart', JSON.stringify(localCart));
-				console.log(localCart);
 			}
+			setTimeout(() => {
+				setCart(false);
+			}, 1000);
+			let carts = JSON.parse(localStorage.getItem('cart'));
+			const totalArrCount = carts.map((item) => item.count);
+			const totalCount = totalArrCount.reduce((a, b) => a + b, 0);
+			setCount(totalCount);
 		} else {
-			cart.dealer_name = state.select;
-			cart.count = 1;
-			localCart.push(cart);
-			localStorage.setItem('cart', JSON.stringify(localCart));
+			setMeg(true);
+			setTimeout(() => {
+				setMeg(false);
+			}, 1000);
 		}
-		setTimeout(() => {
-			setCart(false);
-		}, 1000);
-		let carts = JSON.parse(localStorage.getItem('cart'));
-		const totalArrCount = carts.map((item) => item.count);
-		const totalCount = totalArrCount.reduce((a, b) => a + b, 0);
-		setCount(totalCount);
 	};
 	return (
 		<React.Fragment>
@@ -223,6 +231,7 @@ const Home = (props) => {
 			</AppBar>
 			<main>
 				{cart ? <Snackbar open={true} message="Item added  to cart" /> : null}
+				{meg ? <Snackbar open={true} message="Login to add to cart " /> : null}
 				{/* Hero unit */}
 				<div className={classes.heroContent}>
 					<Container maxWidth="sm">

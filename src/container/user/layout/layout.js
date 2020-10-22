@@ -13,12 +13,26 @@ import Shop from '../../../Buy.svg';
 import IconButton from '@material-ui/core/IconButton';
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 import { useStyles } from './layout.css';
+import { getCartItems } from '../../../fetchApi/userAxios';
 const Layout = (props) => {
 	const [ count, setCount ] = useState();
 	let propCount = props.count;
 	const checkAuth = props.checkAuth;
 	useEffect(
 		() => {
+			if (localStorage.getItem('uToken')) {
+				getCartItems(localStorage.getItem('uToken'))
+					.then((res) => {
+						console.log(res.data.orders);
+						if (res.data.orders.length) {
+							localStorage.setItem('cart', JSON.stringify(res.data.orders[0]));
+							console.log('yes');
+						}
+					})
+					.catch((err) => {
+						console.log(err);
+					});
+			}
 			checkAuth();
 			countCart();
 		},
@@ -46,6 +60,12 @@ const Layout = (props) => {
 	if (props.token) {
 		button = (
 			<Fragment>
+				<Link to="/cart" style={{ textDecoration: 'none' }}>
+					<IconButton>
+						<Typography variant="subtitle1">{count}</Typography>
+						<img alt="another Logo" width="30px" src={Shop} />
+					</IconButton>
+				</Link>
 				<Link to="/history" style={{ textDecoration: 'none' }}>
 					<IconButton>
 						<DescriptionIcon style={{ fontSize: 30 }} />
@@ -74,15 +94,7 @@ const Layout = (props) => {
 							<img alt="logo" src={logo} />
 						</Link>
 					</Typography>
-					<div style={{ marginLeft: 'auto' }}>
-						<Link to="/cart" style={{ textDecoration: 'none' }}>
-							<IconButton>
-								<Typography variant="subtitle1">{count}</Typography>
-								<img alt="another Logo" width="30px" src={Shop} />
-							</IconButton>
-						</Link>
-						{button}
-					</div>
+					<div style={{ marginLeft: 'auto' }}>{button}</div>
 				</Toolbar>
 			</AppBar>
 			{props.children}
