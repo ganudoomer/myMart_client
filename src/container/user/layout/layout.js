@@ -14,6 +14,7 @@ import IconButton from '@material-ui/core/IconButton';
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 import { useStyles } from './layout.css';
 import { getCartItems } from '../../../fetchApi/userAxios';
+import ResponsiveDrawer from './drawer';
 const Layout = (props) => {
 	const [ count, setCount ] = useState();
 	let propCount = props.count;
@@ -86,17 +87,24 @@ const Layout = (props) => {
 
 	return (
 		<React.Fragment>
-			<CssBaseline />
-			<AppBar color="white" position="sticky">
-				<Toolbar>
-					<Typography variant="h6" color="inherit" noWrap>
-						<Link to="/">
-							<img alt="logo" src={logo} />
-						</Link>
-					</Typography>
-					<div style={{ marginLeft: 'auto' }}>{button}</div>
-				</Toolbar>
-			</AppBar>
+			<div>
+				<CssBaseline />
+				<AppBar color="white" position="sticky">
+					<Toolbar>
+						<Typography variant="h6" color="inherit" noWrap>
+							<Link to="/">
+								<img alt="logo" src={logo} />
+							</Link>
+						</Typography>
+						<div className={classes.nav} style={{ marginLeft: 'auto' }}>
+							{button}
+						</div>
+						<div className={classes.revNav} style={{ marginLeft: 'auto' }}>
+							<ResponsiveDrawer token={props.token} count={count} onLogout={props.onLogout} />
+						</div>
+					</Toolbar>
+				</AppBar>
+			</div>
 			{props.children}
 		</React.Fragment>
 	);

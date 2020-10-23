@@ -49,6 +49,16 @@ export const useStyles = makeStyles((theme) => ({
 		backgroundImage: 'linear-gradient(160deg, #0093E9 0%, #80D0C7 100%)',
 		padding: theme.spacing(6)
 	},
+	nav: {
+		[theme.breakpoints.down('sm')]: {
+			display: 'none'
+		}
+	},
+	revNav: {
+		[theme.breakpoints.up('md')]: {
+			display: 'none'
+		}
+	},
 
 	large: {
 		width: 100,
