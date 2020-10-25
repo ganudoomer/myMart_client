@@ -89,7 +89,7 @@ const Layout = (props) => {
 		<React.Fragment>
 			<div>
 				<CssBaseline />
-				<AppBar color="white" position="sticky">
+				<AppBar color="white" position="fixed">
 					<Toolbar>
 						<Typography variant="h6" color="inherit" noWrap>
 							<Link to="/">
@@ -105,7 +105,7 @@ const Layout = (props) => {
 					</Toolbar>
 				</AppBar>
 			</div>
-			{props.children}
+			<div style={{ marginTop: 68 }}>{props.children}</div>
 		</React.Fragment>
 	);
 };

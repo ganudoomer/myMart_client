@@ -120,7 +120,7 @@ export default function TemporaryDrawer(props) {
 								<ExitToAppIcon style={{ fontSize: 25 }} />
 							</IconButton>
 							<ListItemIcon>
-								<ListItemText primary="Live Orders" />
+								<ListItemText primary="Logout" />
 							</ListItemIcon>
 						</ListItem>
 					</Link>
