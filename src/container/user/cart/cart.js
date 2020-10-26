@@ -132,7 +132,6 @@ const Cart = (props) => {
 	const [ loading, setLoading ] = useState(false);
 	//=======================================================================//
 	const paymentHandler = async () => {
-		setLoading(true);
 		const datas = {
 			price: price
 		};
