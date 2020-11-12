@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const uri = 'https://api.sreeganesh.co/admin/';
+const uri = 'https://mymart111.herokuapp.com/admin/';
 
 export const getDealer = (data) => {
 	return new Promise((resolve, reject) => {
